@@ -26,7 +26,10 @@ export class AuthService {
     // Check password is match?
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) throw new ForbiddenException('Credential Incorrect');
-    return this.signToken(user.id, user.username);
+    const { role } = await this.prisma.role.findFirst({
+      where: { id: user.role_id },
+    });
+    return this.signToken(user.id, user.username, role);
   }
   async signup(signUpDto: SignUpDto) {
     // Check Unique variable: email, username, ...
@@ -39,8 +42,14 @@ export class AuthService {
     try {
       const user = await this.prisma.user.create({
         data: {
-          ...signUpDto,
+          // ...signUpDto,
+          username: signUpDto.username,
+          email: signUpDto.email,
           password: hashPassword,
+          role_id: signUpDto.role_id,
+        },
+        include: {
+          role: true,
         },
       });
       return user;
@@ -58,10 +67,12 @@ export class AuthService {
   async signToken(
     userId: number,
     username: string,
+    roles: string,
   ): Promise<{ access_token: string }> {
     const payload = {
       sub: userId,
       username,
+      roles,
     };
 
     const token = await this.jwtService.signAsync(payload, {

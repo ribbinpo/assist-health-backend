@@ -10,6 +10,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Role {
+  id    Int @id @default(autoincrement())
+  role  ROLE @default(USER)
+  users User[]
+}
+
 model User {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
@@ -23,38 +29,28 @@ model User {
   lastName  String?
   birthday DateTime?
   passport String?
-  gender String?
+  gender GENDER? @default(OTHER)
   bloodType String?
   country String?
   weight Float?
   height Float?
-  tel    String?
+  phoneNumber String?
+  professional String?
+  specialSkills String?
+  certificate String?
 
-  admins Admin?
-  trainers Trainer?
-
-  @@map("users")
+  role Role @relation(fields: [role_id], references: [id])
+  role_id Int
 }
 
-model Admin {
-  id        Int     @id @default(autoincrement())
-  admin_id  String  @unique
-
-  userId Int @unique
-  user User @relation(fields: [userId], references: [id])
-
-  @@map("admins")
+enum ROLE {
+  USER
+  ADMIN
+  TRAINER
 }
 
-model Trainer {
-  id            Int
-  train_id      String @unique
-  professional  String?
-  special_skill String?
-  certificate   String?
-
-  userId Int @unique
-  user User @relation(fields: [userId], references: [id])
-
-  @@map("trainers")
+enum GENDER {
+  MALE
+  FEMALE
+  OTHER
 }

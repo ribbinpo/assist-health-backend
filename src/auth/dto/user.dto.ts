@@ -1,3 +1,4 @@
+import { ROLE } from '@prisma/client';
 interface SignInDto {
   username: string;
   password: string;
@@ -11,12 +12,13 @@ interface SignUpDto {
   lastName?: string;
   birthday?: string;
   passport?: string;
-  gender?: string;
+  gender?: ROLE;
   bloodType?: string;
   country?: string;
   weight?: number;
   height?: number;
-  tel?: string;
+  phoneNumber?: string;
+  role_id: number;
 }
 
 export { SignInDto, SignUpDto };

@@ -24,7 +24,12 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
         id: payload.sub,
       },
     });
+    const role = await this.prisma.role.findFirst({
+      where: {
+        id: user.role_id,
+      },
+    });
     delete user.password;
-    return user;
+    return { username: user.username, roles: role.role };
   }
 }
