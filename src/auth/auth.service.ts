@@ -44,8 +44,11 @@ export class AuthService {
         data: {
           // ...signUpDto,
           username: signUpDto.username,
-          email: signUpDto.email,
           password: hashPassword,
+          firstName: signUpDto.firstName,
+          lastName: signUpDto.lastName,
+          email: signUpDto.email,
+          country: signUpDto.country,
           role_id: signUpDto.role_id,
         },
         include: {
