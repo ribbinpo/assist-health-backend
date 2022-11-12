@@ -29,7 +29,7 @@ model User {
   lastName  String?
   birthday DateTime?
   passport String?
-  gender GENDER? @default(OTHER)
+  gender GENDER?
   bloodType String?
   country String?
   weight Float?
@@ -41,6 +41,7 @@ model User {
 
   role Role @relation(fields: [role_id], references: [id])
   role_id Int
+  classSchedule UseronClassSchedule[]
 }
 
 enum ROLE {
@@ -53,4 +54,44 @@ enum GENDER {
   MALE
   FEMALE
   OTHER
+}
+
+model ClassSchedule {
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  className String
+  start_time DateTime
+  end_time DateTime
+  classType CLASSTYPE
+  teacher String?
+  status Boolean
+  entries Int @default(0)
+  limit Int
+
+  user UseronClassSchedule[]
+  room Room @relation(fields: [room_id], references: [id])
+  room_id Int @unique
+}
+
+enum CLASSTYPE {
+  CARDIO
+  STRENGTH
+  FLEXLITY
+}
+
+model UseronClassSchedule {
+  user User @relation(fields: [userId], references: [id])
+  userId Int
+  classSchedule ClassSchedule @relation(fields: [classScheduleId], references: [id])
+  classScheduleId Int
+
+  @@id([userId, classScheduleId])
+}
+
+model Room {
+  id Int @id @default(autoincrement())
+  roomName String
+  user ClassSchedule?
 }
