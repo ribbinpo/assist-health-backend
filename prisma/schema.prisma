@@ -71,8 +71,8 @@ model ClassSchedule {
   limit Int
 
   user UseronClassSchedule[]
-  room Room @relation(fields: [room_id], references: [id])
-  room_id Int @unique
+  room Room? @relation(fields: [room_id], references: [id])
+  room_id Int? @unique
 }
 
 enum CLASSTYPE {
@@ -82,6 +82,7 @@ enum CLASSTYPE {
 }
 
 model UseronClassSchedule {
+  id Int @default(autoincrement())
   user User @relation(fields: [userId], references: [id])
   userId Int
   classSchedule ClassSchedule @relation(fields: [classScheduleId], references: [id])

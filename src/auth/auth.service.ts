@@ -1,6 +1,7 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import { GENDER } from '@prisma/client';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import * as bcrypt from 'bcrypt';
 
@@ -42,14 +43,15 @@ export class AuthService {
     try {
       const user = await this.prisma.user.create({
         data: {
-          // ...signUpDto,
-          username: signUpDto.username,
+          ...signUpDto,
+          // username: signUpDto.username,
           password: hashPassword,
-          firstName: signUpDto.firstName,
-          lastName: signUpDto.lastName,
-          email: signUpDto.email,
-          country: signUpDto.country,
-          role_id: signUpDto.role_id,
+          // firstName: signUpDto.firstName,
+          // lastName: signUpDto.lastName,
+          // email: signUpDto.email,
+          // country: signUpDto.country,
+          // role_id: signUpDto.role_id,
+          gender: GENDER[signUpDto.gender],
         },
         include: {
           role: true,
