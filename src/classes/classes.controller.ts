@@ -16,6 +16,17 @@ export class ClassesController {
     return this.classesService.getById(Number(id));
   }
 
+  @Get('getByUserId')
+  getByUserId(@Query('id') id: string) {
+    return this.classesService.getByUserId(+id);
+  }
+
+  @Get('getByDate')
+  getByDate(@Query('date') date: Date) {
+    return this.classesService.getByDate(date);
+  }
+  
+
   @Post('create')
   @HttpCode(200)
   create(@Body() creatClass: ClassSchedule) {

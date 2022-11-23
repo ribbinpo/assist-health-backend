@@ -33,6 +33,36 @@ export class ClassesService {
     return response;
   }
 
+  async getByUserId(id: number): Promise<{ users: User; classes: ClassSchedule[] }> {
+    const users = await this.prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
+    const classes = await this.prisma.classSchedule.findMany({
+      where: {
+        user: {
+          some: {
+            user: {
+              id: users.id,
+            },
+          },
+        },
+      },
+    });
+    const response = { classes: classes, users };
+    return response;
+  }
+
+  async getByDate(date: Date): Promise<ClassSchedule []> {
+    const classes = await this.prisma.classSchedule.findMany({
+      where: {
+        createdAt: date,
+      },
+    });
+    return classes;
+  }
+
   async create(creatClass: ClassSchedule) {
     try {
       const classes = await this.prisma.classSchedule.create({
