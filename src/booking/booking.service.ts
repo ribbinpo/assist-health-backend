@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { TrainerUser } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -39,6 +40,15 @@ export class BookingService {
     });
     console.log(updateClassSchedule);
     return userOnClassSchedule;
-    return '';
+  }
+
+  async bookTrainer(bookTrainer: TrainerUser) {
+    const bookTrainerRes = await this.prisma.trainerUser.create({
+      data: {
+        ...bookTrainer,
+      },
+    });
+    console.log(bookTrainerRes);
+    return bookTrainerRes;
   }
 }

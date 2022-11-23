@@ -88,6 +88,8 @@ model UseronClassSchedule {
   classSchedule ClassSchedule @relation(fields: [classScheduleId], references: [id])
   classScheduleId Int
 
+  isActive Boolean @default(true)
+
   @@id([userId, classScheduleId])
 }
 
@@ -95,4 +97,18 @@ model Room {
   id Int @id @default(autoincrement())
   roomName String
   user ClassSchedule?
+}
+
+model TrainerUser {
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  start_time DateTime
+  end_time DateTime
+
+  isActive Boolean @default(true)
+  
+  customer_id Int
+  trainer_id Int
 }
