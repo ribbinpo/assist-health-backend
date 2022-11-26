@@ -8,7 +8,11 @@ export class ClassesService {
   constructor(private prisma: PrismaService) {}
 
   async getAll(): Promise<ClassSchedule[]> {
-    const classes = await this.prisma.classSchedule.findMany();
+    const classes = await this.prisma.classSchedule.findMany({
+      where: {
+        status: true,
+      },
+    });
     return classes;
   }
 
@@ -33,7 +37,9 @@ export class ClassesService {
     return response;
   }
 
-  async getByUserId(id: number): Promise<{ users: User; classes: ClassSchedule[] }> {
+  async getByUserId(
+    id: number,
+  ): Promise<{ users: User; classes: ClassSchedule[] }> {
     const users = await this.prisma.user.findUnique({
       where: {
         id,
@@ -54,10 +60,10 @@ export class ClassesService {
     return response;
   }
 
-  async getByDate(date: Date): Promise<ClassSchedule []> {
+  async getByDate(date: Date): Promise<ClassSchedule[]> {
     const classes = await this.prisma.classSchedule.findMany({
       where: {
-        createdAt: date,
+        start_time: date,
       },
     });
     return classes;
@@ -83,5 +89,13 @@ export class ClassesService {
       }
     }
     return;
+  }
+
+  async deleteClass(id: number) {
+    const classDel = await this.prisma.classSchedule.update({
+      where: { id },
+      data: { status: false },
+    });
+    return classDel;
   }
 }

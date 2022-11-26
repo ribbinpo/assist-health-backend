@@ -1,4 +1,13 @@
-import { Body, Controller, Get, HttpCode, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  Param,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { ClassSchedule } from '@prisma/client';
 import { ClassesService } from './classes.service';
 
@@ -25,11 +34,15 @@ export class ClassesController {
   getByDate(@Query('date') date: Date) {
     return this.classesService.getByDate(date);
   }
-  
 
   @Post('create')
   @HttpCode(200)
   create(@Body() creatClass: ClassSchedule) {
     return this.classesService.create(creatClass);
+  }
+
+  @Delete(':id')
+  deleteClass(@Param() { id }) {
+    return this.classesService.deleteClass(+id);
   }
 }
