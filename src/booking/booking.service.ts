@@ -42,6 +42,25 @@ export class BookingService {
     return userOnClassSchedule;
   }
 
+  async bookClassSchduleCancel(userId: number, classScheduleId: number) {
+    const deleteClass = await this.prisma.useronClassSchedule.deleteMany({
+      where: { userId, classScheduleId },
+    });
+    const classSchedule = await this.prisma.classSchedule.findFirst({
+      where: { id: classScheduleId },
+    });
+    const updatedClass = await this.prisma.classSchedule.update({
+      where: {
+        id: classScheduleId,
+      },
+      data: {
+        entries: classSchedule.entries - 1,
+      },
+    });
+    console.log(deleteClass);
+    return deleteClass;
+  }
+
   async bookTrainer(bookTrainer: TrainerUser) {
     const bookTrainerRes = await this.prisma.trainerUser.create({
       data: {
@@ -50,5 +69,13 @@ export class BookingService {
     });
     console.log(bookTrainerRes);
     return bookTrainerRes;
+  }
+
+  async bookTrainerCancel(customerId: number, trainerId: number) {
+    const deleteClass = await this.prisma.trainerUser.deleteMany({
+      where: { customer_id: customerId, trainer_id: trainerId },
+    });
+    console.log(deleteClass);
+    return deleteClass;
   }
 }

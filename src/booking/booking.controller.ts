@@ -13,6 +13,24 @@ export class BookingController {
   ) {
     return this.bookingService.bookClassSchdule(userId, classScheduleId);
   }
+  @Get('bookClassSchduleCancel')
+  bookClassSchduleCanel(
+    @Query('userId') userId: string,
+    @Query('classScheduleId') classScheduleId: string,
+  ) {
+    return this.bookingService.bookClassSchduleCancel(
+      +userId,
+      +classScheduleId,
+    );
+  }
+
+  @Get('bookTrainerCancel')
+  bookTrainerCancel(
+    @Query('customerId') customerId: string,
+    @Query('trainerId') trainerId: string,
+  ) {
+    return this.bookingService.bookTrainerCancel(+customerId, +trainerId);
+  }
 
   @Post('bookTrainer')
   bookTrainer(@Body() bookTrainer: TrainerUser) {
